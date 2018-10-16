@@ -1,8 +1,9 @@
 defmodule ExAdmin.Schema do
   @moduledoc false
-  def primary_key(%Ecto.Query{from: {_, mod}}) do
+  def primary_key(%Ecto.Query{from: %{source: {_, mod}}}) do
     primary_key mod
   end
+
   def primary_key(module) when is_atom(module) do
     case module.__schema__(:primary_key) do
       [] -> nil
@@ -17,7 +18,7 @@ defmodule ExAdmin.Schema do
     Map.get(resource, primary_key(resource))
   end
 
-  def type(%Ecto.Query{from: {_, mod}}, key), do: type(mod, key)
+  def type(%Ecto.Query{from: %{source: {_, mod}}}, key), do: type(mod, key)
   def type(module, key) when is_atom(module) do
     module.__schema__(:type, key)
   end
@@ -34,3 +35,4 @@ defmodule ExAdmin.Schema do
     ]
   end
 end
+
